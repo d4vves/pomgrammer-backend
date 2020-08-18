@@ -1,4 +1,5 @@
 require('dotenv').config()
+const bodyParser = require('body-parser')
 const cors = require('cors')
 const express = require('express')
 const mongoose = require('mongoose')
@@ -23,5 +24,7 @@ app.get('/', (req,res) => {
 
 app.use(passport.initialize())
 require('./config/passport')(passport)
+
+app.use('/', require('./routes/auth'))
 
 app.listen(process.env.PORT || 1000, () => {console.log(`💃 Shuckin' n' jivin' on ${process.env.PORT} 🕺`)})
