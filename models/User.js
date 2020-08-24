@@ -13,6 +13,19 @@ const UserSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    portfolio: {
+      type: String
+    },
+    github: {
+      type: String
+    },
+    linkedin: {
+      type: String
+    },
+    projects: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Project'
+    }],
     date: {
       type: Date,
       default: Date.now
