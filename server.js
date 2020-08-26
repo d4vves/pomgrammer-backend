@@ -28,5 +28,6 @@ require('./config/passport')(passport)
 
 app.use('/', require('./routes/auth'))
 app.use('/projects', passport.authenticate('jwt', { session: false }), require('./routes/projects'))
+app.use('/poms', passport.authenticate('jwt', { session: false }), require('./routes/poms'))
 
 app.listen(process.env.PORT || 1000, () => {console.log(`💃 Shuckin' n' jivin' on ${process.env.PORT} 🕺`)})

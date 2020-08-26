@@ -22,7 +22,7 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    User.findById('5f43fbab1243d710d54c7514')
+    User.findById(req.user._doc._id)
     .then(user => {
         const newProject = new Project({
             title: req.body.title,
