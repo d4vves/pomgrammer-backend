@@ -5,7 +5,7 @@ const User = require('../models/User')
 const Project = require('../models/Project')
 
 router.get('/', (req, res) => {
-    User.findById(req.user._doc._id)
+    User.findById(req.user.id)
     .populate('projects')
     .exec(function (err, user) {
         if (err) res.send(err)

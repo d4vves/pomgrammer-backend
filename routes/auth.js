@@ -46,9 +46,7 @@ router.post('/login', (req, res) => {
         bcrypt.compare(password, user.password)
         .then(match => {
             if (match) {
-                const payload = {...user}
-                delete payload.password
-                delete payload.email
+                const payload = { id: user.id, name: user.name, email: user.email }
                 jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: 3600}, (err, token) => {
                     res.json({ success: true, token: `Bearer ${token}`})
                 })
