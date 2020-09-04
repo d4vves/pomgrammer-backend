@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router()
+const passport = require('passport')
 
 const User = require('../models/User')
 const Project = require('../models/Project')
 
-router.get('/', (req, res) => {
+router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
     User.findById(req.user.id)
     .populate('projects')
     .exec(function (err, user) {
@@ -21,8 +22,8 @@ router.get('/:id', (req, res) => {
     .catch(err => console.log(`🚦 ${err} 🚦`))
 })
 
-router.post('/', (req, res) => {
-    User.findById(req.user._doc._id)
+router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
+    User.findById(req.user.id)
     .then(user => {
         const newProject = new Project({
             title: req.body.title,
@@ -32,7 +33,7 @@ router.post('/', (req, res) => {
         newProject.save()
         user.projects.push(newProject)
         user.save()
-        .then(res.send('Project created!'))
+        .then(res.json(newProject))
         .catch(err => console.log(`🚦 ${err} 🚦`))
     })
 })
@@ -49,11 +50,11 @@ router.put('/:id', (req, res) => {
     .catch(err => console.log(`🚦 ${err} 🚦`))
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     Project.findOneAndDelete({ _id: req.params.id })
     .then(deletedProject => {
-        User.update(
-            { _id: req.user._doc._id },
+        User.updateOne(
+            { _id: req.user.id },
             { $pull: { projects: req.params.id }}
         )
         .then(res.send(`Deleted: ${deletedProject.title}`))

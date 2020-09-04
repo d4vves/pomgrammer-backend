@@ -17,7 +17,7 @@ app.use(cors({
 const User = require('./models/User')
 
 const db = process.env.MONGODB_URI
-mongoose.connect(db).then((() => console.log(`💃 MongoDB Connected 🕺`))).catch(err => console.log(err))
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true }).then((() => console.log(`💃 MongoDB Connected 🕺`))).catch(err => console.log(err))
 
 app.get('/', (req,res) => {
     res.send('Up n attem!')
@@ -27,7 +27,7 @@ app.use(passport.initialize())
 require('./config/passport')(passport)
 
 app.use('/', require('./routes/auth'))
-app.use('/projects', passport.authenticate('jwt', { session: false }), require('./routes/projects'))
+app.use('/projects', require('./routes/projects'))
 app.use('/poms', require('./routes/poms'))
 
 app.listen(process.env.PORT || 1000, () => {console.log(`💃 Shuckin' n' jivin' on ${process.env.PORT} 🕺`)})
